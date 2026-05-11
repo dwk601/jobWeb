@@ -44,6 +44,29 @@ export const LANGS = [
   { value: "bilingual", label: "Bilingual" },
 ] as const;
 
+export const STATES = [
+  { value: "CA", label: "California" },
+  { value: "TX", label: "Texas" },
+  { value: "GA", label: "Georgia" },
+  { value: "NY", label: "New York" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "AL", label: "Alabama" },
+  { value: "WA", label: "Washington" },
+  { value: "MI", label: "Michigan" },
+  { value: "IL", label: "Illinois" },
+  { value: "VA", label: "Virginia" },
+  { value: "TN", label: "Tennessee" },
+  { value: "IN", label: "Indiana" },
+  { value: "NV", label: "Nevada" },
+  { value: "AZ", label: "Arizona" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "OR", label: "Oregon" },
+  { value: "NE", label: "Nebraska" },
+  { value: "KY", label: "Kentucky" },
+  { value: "KS", label: "Kansas" },
+  { value: "SC", label: "South Carolina" },
+] as const;
+
 export const ITEMS_PER_PAGE_OPTIONS = [
   { value: 20, label: "20" },
   { value: 50, label: "50" },

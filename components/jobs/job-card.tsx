@@ -62,9 +62,6 @@ export function JobRow({ job, className }: JobRowProps) {
             {postDate}
           </span>
         )}
-        <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
-          {job.source}
-        </span>
       </div>
     </Link>
   );
@@ -80,7 +77,6 @@ export function JobRowSkeleton() {
       <div className="flex items-center gap-4">
         <Skeleton className="h-3 w-20" />
         <Skeleton className="h-3 w-24" />
-        <Skeleton className="h-4 w-16 rounded" />
       </div>
     </div>
   );

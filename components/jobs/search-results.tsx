@@ -17,16 +17,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { LANGS, SOURCES } from "@/lib/api/constants";
+import { LANGS, STATES } from "@/lib/api/constants";
 
 interface FilterBarProps {
   q: string;
   onQChange: (value: string) => void;
   onSearch: () => void;
-  source: string | null;
-  onSourceChange: (value: string | null) => void;
   language: string | null;
   onLanguageChange: (value: string | null) => void;
+  state: string | null;
+  onStateChange: (value: string | null) => void;
   salaryMin: number | null;
   onSalaryMinChange: (value: number | null) => void;
   salaryMax: number | null;
@@ -39,10 +39,10 @@ export function FilterBar({
   q,
   onQChange,
   onSearch,
-  source,
-  onSourceChange,
   language,
   onLanguageChange,
+  state,
+  onStateChange,
   salaryMin,
   onSalaryMinChange,
   salaryMax,
@@ -62,7 +62,7 @@ export function FilterBar({
               value={q}
               onChange={(e) => onQChange(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onSearch()}
-              placeholder="Search jobs..."
+              placeholder="Search titles and companies..."
               aria-label="Search jobs"
               className="h-10 pl-9 pr-8 text-sm"
             />
@@ -82,23 +82,6 @@ export function FilterBar({
           </div>
 
           <Select
-            value={source ?? ""}
-            onValueChange={(v) => onSourceChange(v || null)}
-          >
-            <SelectTrigger className="h-10 min-w-[110px] text-xs">
-              <SelectValue placeholder="Source" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">All sources</SelectItem>
-              {SOURCES.map((s) => (
-                <SelectItem key={s.value} value={s.value}>
-                  {s.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select
             value={language ?? ""}
             onValueChange={(v) => onLanguageChange(v || null)}
           >
@@ -110,6 +93,23 @@ export function FilterBar({
               {LANGS.map((l) => (
                 <SelectItem key={l.value} value={l.value}>
                   {l.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={state ?? ""}
+            onValueChange={(v) => onStateChange(v || null)}
+          >
+            <SelectTrigger className="h-10 min-w-[110px] text-xs">
+              <SelectValue placeholder="State" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All states</SelectItem>
+              {STATES.map((s) => (
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -165,7 +165,7 @@ export function FilterBar({
             value={q}
             onChange={(e) => onQChange(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && onSearch()}
-            placeholder="Search jobs..."
+            placeholder="Search titles and companies..."
             aria-label="Search jobs"
             className="h-10 pl-9 pr-8 text-sm"
           />
@@ -204,28 +204,6 @@ export function FilterBar({
             <div className="mt-6 flex flex-col gap-4">
               <div className="space-y-1.5">
                 <span className="text-xs font-medium text-muted-foreground">
-                  Source
-                </span>
-                <Select
-                  value={source ?? ""}
-                  onValueChange={(v) => onSourceChange(v || null)}
-                >
-                  <SelectTrigger className="h-10 w-full text-xs">
-                    <SelectValue placeholder="All sources" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">All sources</SelectItem>
-                    {SOURCES.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>
-                        {s.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1.5">
-                <span className="text-xs font-medium text-muted-foreground">
                   Language
                 </span>
                 <Select
@@ -240,6 +218,28 @@ export function FilterBar({
                     {LANGS.map((l) => (
                       <SelectItem key={l.value} value={l.value}>
                         {l.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <span className="text-xs font-medium text-muted-foreground">
+                  State
+                </span>
+                <Select
+                  value={state ?? ""}
+                  onValueChange={(v) => onStateChange(v || null)}
+                >
+                  <SelectTrigger className="h-10 w-full text-xs">
+                    <SelectValue placeholder="All states" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">All states</SelectItem>
+                    {STATES.map((s) => (
+                      <SelectItem key={s.value} value={s.value}>
+                        {s.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -21,6 +21,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SORT_FIELDS } from "@/lib/api/constants";
 import { fetchJobs } from "@/lib/api/jobs";
+import type { JobPosting } from "@/lib/api/schemas";
+
+function sortWithLocationFirst(items: JobPosting[]): JobPosting[] {
+  return [...items].sort((a, b) => {
+    const aHas = a.location?.city || a.location?.state;
+    const bHas = b.location?.city || b.location?.state;
+    if (aHas && !bHas) return -1;
+    if (!aHas && bHas) return 1;
+    return 0;
+  });
+}
 
 interface SearchResultsClientProps {
   initialFilters: Record<string, string | number | undefined>;
@@ -30,9 +41,9 @@ export function SearchResultsClient({
   initialFilters: _initialFilters,
 }: SearchResultsClientProps) {
   const [q, setQ] = useQueryState("q", parseAsString.withDefault(""));
-  const [source, setSource] = useQueryState("source", parseAsString);
   const [company, _setCompany] = useQueryState("company", parseAsString);
   const [language, setLanguage] = useQueryState("language", parseAsString);
+  const [state, setState] = useQueryState("location_state", parseAsString);
   const [salaryMin, setSalaryMin] = useQueryState("salary_min", parseAsFloat);
   const [salaryMax, setSalaryMax] = useQueryState("salary_max", parseAsFloat);
   const [sortBy, setSortBy] = useQueryState(
@@ -59,9 +70,9 @@ export function SearchResultsClient({
   const filters = useMemo(
     () => ({
       q: q || undefined,
-      source: source ?? undefined,
       company: company ?? undefined,
       language: language ?? undefined,
+      location_state: state ?? undefined,
       salary_min: salaryMin ?? undefined,
       salary_max: salaryMax ?? undefined,
       sort_by: sortBy,
@@ -71,9 +82,9 @@ export function SearchResultsClient({
     }),
     [
       q,
-      source,
       company,
       language,
+      state,
       salaryMin,
       salaryMax,
       sortBy,
@@ -90,7 +101,7 @@ export function SearchResultsClient({
   });
 
   const hasActiveFilters =
-    !!q || !!source || !!language || salaryMin !== null || salaryMax !== null;
+    !!q || !!language || !!state || salaryMin !== null || salaryMax !== null;
 
   const handleSearch = useCallback(() => {
     setPage(1);
@@ -114,24 +125,25 @@ export function SearchResultsClient({
 
   const handleClearFilters = useCallback(() => {
     setQ("");
-    setSource(null);
     setLanguage(null);
+    setState(null);
     setSalaryMin(null);
     setSalaryMax(null);
     setPage(1);
-  }, [setQ, setSource, setLanguage, setSalaryMin, setSalaryMax, setPage]);
+  }, [setQ, setLanguage, setState, setSalaryMin, setSalaryMax, setPage]);
+
+  const sortedItems = data ? sortWithLocationFirst(data.items) : null;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-      {/* Filter bar */}
       <FilterBar
         q={q}
         onQChange={setQ}
         onSearch={handleSearch}
-        source={source}
-        onSourceChange={setSource}
         language={language}
         onLanguageChange={setLanguage}
+        state={state}
+        onStateChange={setState}
         salaryMin={salaryMin}
         onSalaryMinChange={setSalaryMin}
         salaryMax={salaryMax}
@@ -140,7 +152,6 @@ export function SearchResultsClient({
         hasActiveFilters={hasActiveFilters}
       />
 
-      {/* Results header */}
       <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
         <p className="text-xs text-muted-foreground">
           {isLoading
@@ -201,7 +212,6 @@ export function SearchResultsClient({
         </DropdownMenu>
       </div>
 
-      {/* Results */}
       {isLoading ? (
         <JobListSkeleton count={10} />
       ) : isError ? (
@@ -215,10 +225,10 @@ export function SearchResultsClient({
               : "Something went wrong. Try again."}
           </p>
         </div>
-      ) : data && data.items.length > 0 ? (
+      ) : data && sortedItems && sortedItems.length > 0 ? (
         <>
           <div className="divide-y divide-border">
-            {data.items.map((job) => (
+            {sortedItems.map((job) => (
               <JobRow key={job.id} job={job} />
             ))}
           </div>
