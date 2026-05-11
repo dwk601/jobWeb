@@ -134,8 +134,13 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
         </div>
 
         {job.description && (
-          <section>
-            <h2 className="mb-3 text-sm font-semibold">Description</h2>
+          <section aria-labelledby="job-description-heading">
+            <h2
+              id="job-description-heading"
+              className="mb-3 text-sm font-semibold"
+            >
+              Description
+            </h2>
             <div
               className="prose prose-sm max-w-none text-sm leading-relaxed [&_a]:text-primary"
               // biome-ignore lint/security/noDangerouslySetInnerHtml: job descriptions are HTML from the API
@@ -144,9 +149,14 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
           </section>
         )}
 
-        <section className="border-t border-border pt-6">
-          <h2 className="mb-3 text-sm font-semibold">Details</h2>
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+        <section
+          aria-labelledby="job-details-heading"
+          className="border-t border-border pt-6"
+        >
+          <h2 id="job-details-heading" className="mb-3 text-sm font-semibold">
+            Details
+          </h2>
+          <dl className="grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
             <div>
               <dt className="text-xs text-muted-foreground">Source</dt>
               <dd>{job.source}</dd>

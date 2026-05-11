@@ -36,10 +36,11 @@ export function Hero() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Job title or company..."
-              className="h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Job title or company"
+              className="h-11 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
-          <div className="relative flex-1 sm:max-w-[180px]">
+          <div className="relative flex-1 sm:max-w-[200px]">
             <MapPinIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
               name="location"
@@ -47,12 +48,13 @@ export function Hero() {
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="City or State..."
-              className="h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="City or State"
+              className="h-11 w-full rounded-md border border-input bg-background pl-10 pr-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
           <button
             type="submit"
-            className="inline-flex h-10 shrink-0 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-11 shrink-0 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
           >
             Search
           </button>
