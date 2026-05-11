@@ -1,11 +1,7 @@
 import type { z } from "zod";
 
-const API_BASE = "/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "/api/v1";
 
-/**
- * Typed fetch with Zod validation.
- * Uses the Next.js proxy so no CORS issues.
- */
 export async function apiCall<T extends z.ZodTypeAny>(
   path: string,
   schema: T,
