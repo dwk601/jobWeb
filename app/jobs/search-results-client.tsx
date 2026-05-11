@@ -33,10 +33,6 @@ export function SearchResultsClient({
   const [source, setSource] = useQueryState("source", parseAsString);
   const [company, _setCompany] = useQueryState("company", parseAsString);
   const [language, setLanguage] = useQueryState("language", parseAsString);
-  const [jobCategory, setJobCategory] = useQueryState(
-    "job_category",
-    parseAsString,
-  );
   const [salaryMin, setSalaryMin] = useQueryState("salary_min", parseAsFloat);
   const [salaryMax, setSalaryMax] = useQueryState("salary_max", parseAsFloat);
   const [sortBy, setSortBy] = useQueryState(
@@ -66,7 +62,6 @@ export function SearchResultsClient({
       source: source ?? undefined,
       company: company ?? undefined,
       language: language ?? undefined,
-      job_category: jobCategory ?? undefined,
       salary_min: salaryMin ?? undefined,
       salary_max: salaryMax ?? undefined,
       sort_by: sortBy,
@@ -79,7 +74,6 @@ export function SearchResultsClient({
       source,
       company,
       language,
-      jobCategory,
       salaryMin,
       salaryMax,
       sortBy,
@@ -96,12 +90,7 @@ export function SearchResultsClient({
   });
 
   const hasActiveFilters =
-    !!q ||
-    !!source ||
-    !!jobCategory ||
-    !!language ||
-    salaryMin !== null ||
-    salaryMax !== null;
+    !!q || !!source || !!language || salaryMin !== null || salaryMax !== null;
 
   const handleSearch = useCallback(() => {
     setPage(1);
@@ -127,19 +116,10 @@ export function SearchResultsClient({
     setQ("");
     setSource(null);
     setLanguage(null);
-    setJobCategory(null);
     setSalaryMin(null);
     setSalaryMax(null);
     setPage(1);
-  }, [
-    setQ,
-    setSource,
-    setLanguage,
-    setJobCategory,
-    setSalaryMin,
-    setSalaryMax,
-    setPage,
-  ]);
+  }, [setQ, setSource, setLanguage, setSalaryMin, setSalaryMax, setPage]);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
@@ -150,8 +130,6 @@ export function SearchResultsClient({
         onSearch={handleSearch}
         source={source}
         onSourceChange={setSource}
-        jobCategory={jobCategory}
-        onJobCategoryChange={setJobCategory}
         language={language}
         onLanguageChange={setLanguage}
         salaryMin={salaryMin}

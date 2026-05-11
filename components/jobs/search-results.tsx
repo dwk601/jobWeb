@@ -17,7 +17,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { JOB_CATEGORIES, LANGS, SOURCES } from "@/lib/api/constants";
+import { LANGS, SOURCES } from "@/lib/api/constants";
 
 interface FilterBarProps {
   q: string;
@@ -25,8 +25,6 @@ interface FilterBarProps {
   onSearch: () => void;
   source: string | null;
   onSourceChange: (value: string | null) => void;
-  jobCategory: string | null;
-  onJobCategoryChange: (value: string | null) => void;
   language: string | null;
   onLanguageChange: (value: string | null) => void;
   salaryMin: number | null;
@@ -43,8 +41,6 @@ export function FilterBar({
   onSearch,
   source,
   onSourceChange,
-  jobCategory,
-  onJobCategoryChange,
   language,
   onLanguageChange,
   salaryMin,
@@ -97,23 +93,6 @@ export function FilterBar({
               {SOURCES.map((s) => (
                 <SelectItem key={s.value} value={s.value}>
                   {s.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={jobCategory ?? ""}
-            onValueChange={(v) => onJobCategoryChange(v || null)}
-          >
-            <SelectTrigger className="h-10 min-w-[110px] text-xs">
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">All categories</SelectItem>
-              {JOB_CATEGORIES.map((c) => (
-                <SelectItem key={c.value} value={c.value}>
-                  {c.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -239,28 +218,6 @@ export function FilterBar({
                     {SOURCES.map((s) => (
                       <SelectItem key={s.value} value={s.value}>
                         {s.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1.5">
-                <span className="text-xs font-medium text-muted-foreground">
-                  Category
-                </span>
-                <Select
-                  value={jobCategory ?? ""}
-                  onValueChange={(v) => onJobCategoryChange(v || null)}
-                >
-                  <SelectTrigger className="h-10 w-full text-xs">
-                    <SelectValue placeholder="All categories" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">All categories</SelectItem>
-                    {JOB_CATEGORIES.map((c) => (
-                      <SelectItem key={c.value} value={c.value}>
-                        {c.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

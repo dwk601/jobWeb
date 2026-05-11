@@ -32,10 +32,6 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
     filters.location_city = raw.location_city;
   if (raw.location_state && typeof raw.location_state === "string")
     filters.location_state = raw.location_state;
-  if (raw.job_category && typeof raw.job_category === "string")
-    filters.job_category = raw.job_category;
-  if (raw.job_status && typeof raw.job_status === "string")
-    filters.job_status = raw.job_status;
   if (raw.sort_by && typeof raw.sort_by === "string")
     filters.sort_by = raw.sort_by;
   if (raw.sort_order && typeof raw.sort_order === "string")

@@ -21,7 +21,6 @@ export const searchParams = {
   language: parseAsString,
   location_city: parseAsString,
   location_state: parseAsString,
-  job_category: parseAsString,
 
   // Salary
   salary_min: parseAsFloat,
