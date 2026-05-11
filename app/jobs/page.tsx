@@ -5,8 +5,12 @@ import { makeQueryClient } from "@/lib/query-client";
 import { SearchResultsClient } from "./search-results-client";
 
 export const metadata: Metadata = {
-  title: "Job Search Results",
-  description: "Find your next career opportunity",
+  title: "Job Search",
+  description:
+    "Browse and filter thousands of job postings from the US and South Korea. Filter by source, category, language, salary, and more.",
+  alternates: {
+    canonical: "/jobs",
+  },
 };
 
 interface JobsPageProps {
