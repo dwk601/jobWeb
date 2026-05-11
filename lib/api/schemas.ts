@@ -18,6 +18,14 @@ export const JobSalarySchema = z.object({
   currency: z.string().nullable(),
 });
 
+export const JobMetaSchema = z.object({
+  record_id: z.string().optional(),
+  list_page_url: z.string().optional(),
+  schema_version: z.string().optional(),
+  detail_fetch_error: z.unknown().nullable(),
+  detail_fetch_status: z.number().nullable(),
+});
+
 export const JobPostingSchema = z.object({
   id: z.number(),
   record_id: z.string(),
@@ -30,6 +38,15 @@ export const JobPostingSchema = z.object({
   post_date: z.string().nullable(),
   link: z.string().nullable(),
   job_category: z.array(z.string()).nullable(),
+  company_inferred: z.boolean().optional(),
+  description: z.string().nullable().optional(),
+  description_length: z.number().optional(),
+  contact: z.string().nullable().optional(),
+  post_date_raw: z.string().nullable().optional(),
+  scraped_at: z.string().optional(),
+  meta: JobMetaSchema.nullable().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export type JobPosting = z.infer<typeof JobPostingSchema>;
@@ -90,6 +107,8 @@ export const JobListFiltersSchema = z.object({
   language: z.string().optional(),
   location_city: z.string().optional(),
   location_state: z.string().optional(),
+  salary_min: z.number().optional(),
+  salary_max: z.number().optional(),
   post_date_from: z.string().optional(),
   post_date_to: z.string().optional(),
   sort_by: SortFieldSchema.default("post_date"),

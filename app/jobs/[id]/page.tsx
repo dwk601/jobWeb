@@ -18,9 +18,16 @@ export async function generateMetadata({
     const location = [job.location?.city, job.location?.state]
       .filter(Boolean)
       .join(", ");
-    const description = [job.company, location, job.salary?.raw?.slice(0, 80)]
+    const description = [
+      job.company,
+      location,
+      job.description
+        ?.replace(/<[^>]*>/g, "")
+        .slice(0, 120)
+        .trim(),
+    ]
       .filter(Boolean)
-      .join(" — ")
+      .join(" - ")
       .slice(0, 160);
     return {
       title,

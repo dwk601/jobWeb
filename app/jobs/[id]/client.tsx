@@ -7,6 +7,7 @@ import {
   Building2,
   Clock,
   ExternalLinkIcon,
+  MailIcon,
   MapPinIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -67,15 +68,21 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
           : null;
 
   const salaryInfo = job.salary
-    ? [salary, job.salary.unit ? `/ ${job.salary.unit}` : null]
-        .filter(Boolean)
-        .join(" ")
+    ? [salary, job.salary.unit].filter(Boolean).join(" / ")
     : null;
 
   const postDate = job.post_date
     ? new Date(job.post_date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
+        day: "numeric",
+      })
+    : null;
+
+  const scrapedDate = job.scraped_at
+    ? new Date(job.scraped_at).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
         day: "numeric",
       })
     : null;
@@ -93,6 +100,7 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
       </Link>
 
       <div className="space-y-8">
+        {/* Header */}
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
@@ -101,16 +109,10 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
             <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
               {job.language}
             </span>
-            {job.link && (
-              <a
-                href={job.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline"
-              >
-                <ExternalLinkIcon className="size-3" />
-                Original posting
-              </a>
+            {job.company_inferred && (
+              <span className="text-[10px] text-muted-foreground">
+                company inferred
+              </span>
             )}
           </div>
 
@@ -143,8 +145,44 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
               </span>
             )}
           </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {job.link && (
+              <a
+                href={job.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+              >
+                <ExternalLinkIcon className="size-3" />
+                Original posting
+              </a>
+            )}
+            {job.contact && (
+              <a
+                href={`mailto:${job.contact}`}
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <MailIcon className="size-3" />
+                {job.contact}
+              </a>
+            )}
+          </div>
         </div>
 
+        {/* Description */}
+        {job.description && (
+          <section className="border-t border-border pt-6">
+            <h2 className="mb-4 text-sm font-semibold">Description</h2>
+            <div
+              className="prose prose-sm max-w-none text-sm leading-relaxed [&_a]:text-primary"
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: job descriptions are HTML from the API
+              dangerouslySetInnerHTML={{ __html: job.description }}
+            />
+          </section>
+        )}
+
+        {/* Details */}
         <section className="border-t border-border pt-6">
           <h2 className="mb-3 text-sm font-semibold">Details</h2>
           <dl className="grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
@@ -162,16 +200,24 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
                 <dd>{categories}</dd>
               </div>
             )}
+            {job.salary?.raw && (
+              <div className="sm:col-span-2">
+                <dt className="text-xs text-muted-foreground">Compensation</dt>
+                <dd className="text-xs whitespace-pre-wrap">
+                  {job.salary.raw}
+                </dd>
+              </div>
+            )}
             {postDate && (
               <div>
                 <dt className="text-xs text-muted-foreground">Posted</dt>
                 <dd>{postDate}</dd>
               </div>
             )}
-            {job.salary?.raw && (
-              <div className="sm:col-span-2">
-                <dt className="text-xs text-muted-foreground">Compensation</dt>
-                <dd className="text-xs">{job.salary.raw}</dd>
+            {scrapedDate && (
+              <div>
+                <dt className="text-xs text-muted-foreground">Last updated</dt>
+                <dd>{scrapedDate}</dd>
               </div>
             )}
           </dl>
@@ -187,7 +233,7 @@ function JobDetailSkeleton() {
       <div className="space-y-8">
         <div className="space-y-3">
           <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-8 w-2/3" />
+          <Skeleton className="h-8 w-3/4" />
           <Skeleton className="h-5 w-1/3" />
           <div className="flex gap-6">
             <Skeleton className="h-4 w-32" />
@@ -199,6 +245,8 @@ function JobDetailSkeleton() {
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-1/2" />
         </div>
       </div>
     </div>

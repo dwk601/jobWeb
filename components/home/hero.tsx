@@ -23,7 +23,7 @@ export function Hero() {
         Find your next role
       </h1>
       <p className="mb-8 text-sm text-muted-foreground">
-        Search thousands of jobs across the US
+        Search titles, companies, and descriptions across 7,400+ jobs
       </p>
 
       <form onSubmit={handleSubmit} className="w-full">
