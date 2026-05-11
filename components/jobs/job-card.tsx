@@ -37,10 +37,18 @@ export function JobRow({ job, className }: JobRowProps) {
       )}
     >
       <div className="min-w-0 flex-1">
-        <h3 className="truncate text-sm font-medium text-foreground">
+        <h3
+          className="truncate text-sm font-medium text-foreground"
+          lang={job.language === "korean" ? "ko" : undefined}
+        >
           {job.title}
         </h3>
-        <p className="text-xs text-muted-foreground">{job.company}</p>
+        <p
+          className="text-xs text-muted-foreground"
+          lang={job.language === "korean" ? "ko" : undefined}
+        >
+          {job.company}
+        </p>
       </div>
 
       <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground sm:mt-0 sm:shrink-0">

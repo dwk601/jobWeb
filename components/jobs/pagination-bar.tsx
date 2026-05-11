@@ -36,7 +36,7 @@ export function PaginationBar({
           value={String(pageSize)}
           onValueChange={(v) => onPageSizeChange(Number(v))}
         >
-          <SelectTrigger className="w-20 h-10 text-xs">
+          <SelectTrigger className="w-20 text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -54,7 +54,7 @@ export function PaginationBar({
           size="sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="h-10 w-10 p-0"
+          className="h-11 w-11 p-0"
           aria-label="Previous page"
         >
           <ChevronLeft className="size-4" />
@@ -66,7 +66,7 @@ export function PaginationBar({
             variant={page === currentPage ? "default" : "outline"}
             size="sm"
             onClick={() => onPageChange(page)}
-            className="h-10 w-10 p-0 text-xs"
+            className="h-11 w-11 p-0 text-xs"
           >
             {page}
           </Button>
@@ -77,7 +77,7 @@ export function PaginationBar({
           size="sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="h-10 w-10 p-0"
+          className="h-11 w-11 p-0"
           aria-label="Next page"
         >
           <ChevronRight className="size-4" />

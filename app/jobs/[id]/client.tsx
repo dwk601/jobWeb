@@ -103,26 +103,34 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
         {/* Header */}
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-2">
-            <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
+            <span className="rounded border border-border px-1.5 py-0.5 text-[11px] font-medium uppercase text-muted-foreground">
               {job.source}
             </span>
-            <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
+            <span className="rounded border border-border px-1.5 py-0.5 text-[11px] font-medium uppercase text-muted-foreground">
               {job.language}
             </span>
             {job.company_inferred && (
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-[11px] text-muted-foreground">
                 company inferred
               </span>
             )}
           </div>
 
-          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+          <h1
+            className="text-xl font-semibold tracking-tight sm:text-2xl"
+            lang={job.language === "korean" ? "ko" : undefined}
+          >
             {job.title}
           </h1>
 
           <div className="mt-3 flex items-center gap-1.5 text-sm">
             <Building2 className="size-4 text-muted-foreground" />
-            <span className="font-medium">{job.company}</span>
+            <span
+              className="font-medium"
+              lang={job.language === "korean" ? "ko" : undefined}
+            >
+              {job.company}
+            </span>
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">
@@ -176,6 +184,7 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
             <h2 className="mb-4 text-sm font-semibold">Description</h2>
             <div
               className="prose prose-sm max-w-none text-sm leading-relaxed [&_a]:text-primary"
+              lang={job.language === "korean" ? "ko" : undefined}
               // biome-ignore lint/security/noDangerouslySetInnerHtml: job descriptions are HTML from the API
               dangerouslySetInnerHTML={{ __html: job.description }}
             />

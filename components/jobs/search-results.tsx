@@ -73,7 +73,7 @@ export function FilterBar({
                   onQChange("");
                   onSearch();
                 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 size-9 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="Clear search"
               >
                 <X className="size-3.5" />
@@ -85,7 +85,7 @@ export function FilterBar({
             value={language ?? ""}
             onValueChange={(v) => onLanguageChange(v || null)}
           >
-            <SelectTrigger className="h-10 min-w-[110px] text-xs">
+            <SelectTrigger className="min-w-[110px] text-xs">
               <SelectValue placeholder="Language" />
             </SelectTrigger>
             <SelectContent>
@@ -102,7 +102,7 @@ export function FilterBar({
             value={state ?? ""}
             onValueChange={(v) => onStateChange(v || null)}
           >
-            <SelectTrigger className="h-10 min-w-[110px] text-xs">
+            <SelectTrigger className="min-w-[110px] text-xs">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
@@ -126,7 +126,7 @@ export function FilterBar({
                 )
               }
               aria-label="Minimum salary"
-              className="h-10 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="h-11 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <span className="text-xs text-muted-foreground">-</span>
             <Input
@@ -139,7 +139,7 @@ export function FilterBar({
                 )
               }
               aria-label="Maximum salary"
-              className="h-10 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="h-11 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
           </div>
 
@@ -176,7 +176,7 @@ export function FilterBar({
                 onQChange("");
                 onSearch();
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 size-9 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Clear search"
             >
               <X className="size-3.5" />
@@ -210,7 +210,7 @@ export function FilterBar({
                   value={language ?? ""}
                   onValueChange={(v) => onLanguageChange(v || null)}
                 >
-                  <SelectTrigger className="h-10 w-full text-xs">
+                  <SelectTrigger className="w-full text-xs">
                     <SelectValue placeholder="All languages" />
                   </SelectTrigger>
                   <SelectContent>
@@ -232,7 +232,7 @@ export function FilterBar({
                   value={state ?? ""}
                   onValueChange={(v) => onStateChange(v || null)}
                 >
-                  <SelectTrigger className="h-10 w-full text-xs">
+                  <SelectTrigger className="w-full text-xs">
                     <SelectValue placeholder="All states" />
                   </SelectTrigger>
                   <SelectContent>
@@ -261,7 +261,7 @@ export function FilterBar({
                       )
                     }
                     aria-label="Minimum salary"
-                    className="h-10 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    className="h-11 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <span className="text-xs text-muted-foreground">-</span>
                   <Input
@@ -274,7 +274,7 @@ export function FilterBar({
                       )
                     }
                     aria-label="Maximum salary"
-                    className="h-10 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    className="h-11 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                 </div>
               </div>

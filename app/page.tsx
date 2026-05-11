@@ -28,8 +28,7 @@ export default function Home() {
               "@type": "SearchAction",
               target: {
                 "@type": "EntryPoint",
-                urlTemplate:
-                  "http://localhost:3000/jobs?q={search_term_string}",
+                urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/jobs?q={search_term_string}`,
               },
               "query-input": "required name=search_term_string",
             },

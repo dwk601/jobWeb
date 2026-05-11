@@ -8,7 +8,7 @@ import {
   parseAsStringEnum,
   useQueryState,
 } from "nuqs";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { JobListSkeleton, JobRow } from "@/components/jobs/job-card";
 import { PaginationBar } from "@/components/jobs/pagination-bar";
 import { EmptyState, FilterBar } from "@/components/jobs/search-results";
@@ -68,8 +68,9 @@ export function SearchResultsClient({
     parseAsInteger.withDefault(20),
   );
 
+  const detectedState = useMemo(() => detectStateQuery(q), [q]);
+
   const filters = useMemo(() => {
-    const detectedState = detectStateQuery(q);
     return {
       q: detectedState ? undefined : q || undefined,
       company: company ?? undefined,
@@ -93,6 +94,7 @@ export function SearchResultsClient({
     sortOrder,
     page,
     pageSize,
+    detectedState,
   ]);
 
   const { data, isLoading, isError, error } = useQuery({
@@ -101,8 +103,6 @@ export function SearchResultsClient({
     placeholderData: (prev) => prev,
   });
 
-  const detectedState = detectStateQuery(q);
-
   const hasActiveFilters =
     !!q || !!language || !!state || salaryMin !== null || salaryMax !== null;
 
@@ -110,10 +110,12 @@ export function SearchResultsClient({
     setPage(1);
   }, [setPage]);
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const handlePageChange = useCallback(
     (newPage: number) => {
       setPage(newPage);
-      window.scrollTo(0, 0);
+      resultsRef.current?.scrollIntoView({ behavior: "instant" });
     },
     [setPage],
   );
@@ -135,10 +137,13 @@ export function SearchResultsClient({
     setPage(1);
   }, [setQ, setLanguage, setState, setSalaryMin, setSalaryMax, setPage]);
 
-  const sortedItems = data ? sortWithLocationFirst(data.items) : null;
+  const sortedItems = useMemo(
+    () => (data ? sortWithLocationFirst(data.items) : null),
+    [data],
+  );
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+    <div ref={resultsRef} className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
       <FilterBar
         q={q}
         onQChange={setQ}
@@ -173,6 +178,7 @@ export function SearchResultsClient({
               <button
                 type="button"
                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                aria-label="Sort jobs"
               >
                 <span>
                   Sort:{" "}
