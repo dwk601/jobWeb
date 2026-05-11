@@ -15,12 +15,16 @@ export async function generateMetadata({
   try {
     const job = await fetchJobById(Number(id));
     const title = `${job.title} at ${job.company}`;
-    const description =
-      job.description?.replace(/<[^>]*>/g, "").slice(0, 160) ??
-      `Job posting for ${job.title} at ${job.company}`;
+    const location = [job.location?.city, job.location?.state]
+      .filter(Boolean)
+      .join(", ");
+    const description = [job.company, location, job.salary?.raw?.slice(0, 80)]
+      .filter(Boolean)
+      .join(" — ")
+      .slice(0, 160);
     return {
       title,
-      description,
+      description: description || `Job posting for ${job.title}`,
       alternates: {
         canonical: `/jobs/${job.id}`,
       },
@@ -64,39 +68,38 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         "@context": "https://schema.org",
         "@type": "JobPosting",
         title: job.title,
-        description: job.description?.replace(/<[^>]*>/g, "") ?? "",
-        datePosted: job.post_date ?? job.created_at,
+        description: job.link ?? "",
+        datePosted: job.post_date,
         hiringOrganization: {
           "@type": "Organization",
           name: job.company,
         },
-        jobLocation: job.location_country
-          ? {
-              "@type": "Place",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: job.location_city ?? "",
-                addressRegion: job.location_state ?? "",
-                addressCountry: job.location_country ?? "",
-              },
-            }
-          : undefined,
-        baseSalary:
-          job.salary_min || job.salary_max
+        jobLocation:
+          job.location?.city || job.location?.state
             ? {
-                "@type": "MonetaryAmount",
-                currency: job.currency ?? "USD",
-                value: {
-                  "@type": "QuantitativeValue",
-                  minValue: job.salary_min ?? undefined,
-                  maxValue: job.salary_max ?? undefined,
-                  unitText: job.salary_period ?? "YEAR",
+                "@type": "Place",
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: job.location.city ?? "",
+                  addressRegion: job.location.state ?? "",
                 },
               }
             : undefined,
-        employmentType: job.job_status ?? undefined,
-        occupationalCategory: job.job_category ?? undefined,
-        industry: job.source ?? undefined,
+        baseSalary:
+          job.salary?.min || job.salary?.max
+            ? {
+                "@type": "MonetaryAmount",
+                currency: job.salary.currency ?? "USD",
+                value: {
+                  "@type": "QuantitativeValue",
+                  minValue: job.salary.min ?? undefined,
+                  maxValue: job.salary.max ?? undefined,
+                  unitText: job.salary.unit ?? "YEAR",
+                },
+              }
+            : undefined,
+        occupationalCategory: job.job_category?.join(", "),
+        industry: job.source,
       }
     : null;
 

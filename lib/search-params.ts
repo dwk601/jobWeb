@@ -18,12 +18,10 @@ export const searchParams = {
   // Filters
   source: parseAsString,
   company: parseAsString,
-  company_inferred: parseAsInteger,
   language: parseAsString,
   location_city: parseAsString,
   location_state: parseAsString,
   job_category: parseAsString,
-  job_status: parseAsString,
 
   // Salary
   salary_min: parseAsFloat,
@@ -39,11 +37,8 @@ export const searchParams = {
     "title",
     "company",
     "post_date",
-    "created_at",
-    "updated_at",
     "source",
     "language",
-    "description_length",
   ]).withDefault("post_date"),
 
   sort_order: parseAsStringEnum(["asc", "desc"]).withDefault("desc"),

@@ -11,7 +11,7 @@ interface JobRowProps {
 }
 
 export function JobRow({ job, className }: JobRowProps) {
-  const location = [job.location_city, job.location_state]
+  const location = [job.location?.city, job.location?.state]
     .filter(Boolean)
     .join(", ");
 
@@ -20,11 +20,13 @@ export function JobRow({ job, className }: JobRowProps) {
     : null;
 
   const salary =
-    job.salary_min && job.salary_max
-      ? `$${job.salary_min.toLocaleString()} - $${job.salary_max.toLocaleString()}`
-      : job.salary_min
-        ? `$${job.salary_min.toLocaleString()}+`
-        : null;
+    job.salary?.min && job.salary?.max
+      ? `$${job.salary.min.toLocaleString()} - $${job.salary.max.toLocaleString()}`
+      : job.salary?.min
+        ? `$${job.salary.min.toLocaleString()}+`
+        : job.salary?.max
+          ? `Up to $${job.salary.max.toLocaleString()}`
+          : null;
 
   return (
     <Link
@@ -38,12 +40,7 @@ export function JobRow({ job, className }: JobRowProps) {
         <h3 className="truncate text-sm font-medium text-foreground">
           {job.title}
         </h3>
-        <p className="text-xs text-muted-foreground">
-          {job.company}
-          {job.company_inferred && (
-            <span className="ml-1 opacity-60">(inferred)</span>
-          )}
-        </p>
+        <p className="text-xs text-muted-foreground">{job.company}</p>
       </div>
 
       <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground sm:mt-0 sm:shrink-0">

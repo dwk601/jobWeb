@@ -26,8 +26,8 @@ export const SORT_FIELDS = [
   { value: "post_date", label: "Date Posted" },
   { value: "title", label: "Title" },
   { value: "company", label: "Company" },
-  { value: "salary", label: "Salary" },
-  { value: "relevance", label: "Relevance" },
+  { value: "source", label: "Source" },
+  { value: "language", label: "Language" },
 ] as const;
 
 export const JOB_STATUSES = [

@@ -37,7 +37,6 @@ export function SearchResultsClient({
     "job_category",
     parseAsString,
   );
-  const [_jobStatus] = useQueryState("job_status", parseAsString);
   const [salaryMin, setSalaryMin] = useQueryState("salary_min", parseAsFloat);
   const [salaryMax, setSalaryMax] = useQueryState("salary_max", parseAsFloat);
   const [sortBy, setSortBy] = useQueryState(
@@ -47,11 +46,8 @@ export function SearchResultsClient({
       "title",
       "company",
       "post_date",
-      "created_at",
-      "updated_at",
       "source",
       "language",
-      "description_length",
     ]).withDefault("post_date"),
   );
   const [sortOrder, _setSortOrder] = useQueryState(

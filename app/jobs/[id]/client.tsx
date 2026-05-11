@@ -6,6 +6,7 @@ import {
   BanknoteIcon,
   Building2,
   Clock,
+  ExternalLinkIcon,
   MapPinIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -52,20 +53,24 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
     );
   }
 
-  const location = [job.location_city, job.location_state, job.location_country]
+  const location = [job.location?.city, job.location?.state]
     .filter(Boolean)
     .join(", ");
 
   const salary =
-    job.salary_min && job.salary_max
-      ? `$${job.salary_min.toLocaleString()} - $${job.salary_max.toLocaleString()}`
-      : job.salary_min
-        ? `$${job.salary_min.toLocaleString()}+`
-        : null;
+    job.salary?.min && job.salary?.max
+      ? `$${job.salary.min.toLocaleString()} - $${job.salary.max.toLocaleString()}`
+      : job.salary?.min
+        ? `$${job.salary.min.toLocaleString()}+`
+        : job.salary?.max
+          ? `Up to $${job.salary.max.toLocaleString()}`
+          : null;
 
-  const salaryPeriod = job.salary_period
-    ? ` / ${job.salary_period.toLowerCase()}`
-    : "";
+  const salaryInfo = job.salary
+    ? [salary, job.salary.unit ? `/ ${job.salary.unit}` : null]
+        .filter(Boolean)
+        .join(" ")
+    : null;
 
   const postDate = job.post_date
     ? new Date(job.post_date).toLocaleDateString("en-US", {
@@ -74,6 +79,8 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
         day: "numeric",
       })
     : null;
+
+  const categories = job.job_category?.join(", ");
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
@@ -87,14 +94,23 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
 
       <div className="space-y-8">
         <div>
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
               {job.source}
             </span>
-            {job.language && (
-              <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
-                {job.language.toUpperCase()}
-              </span>
+            <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
+              {job.language}
+            </span>
+            {job.link && (
+              <a
+                href={job.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline"
+              >
+                <ExternalLinkIcon className="size-3" />
+                Original posting
+              </a>
             )}
           </div>
 
@@ -105,9 +121,6 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
           <div className="mt-3 flex items-center gap-1.5 text-sm">
             <Building2 className="size-4 text-muted-foreground" />
             <span className="font-medium">{job.company}</span>
-            {job.company_inferred && (
-              <span className="text-xs text-muted-foreground">(inferred)</span>
-            )}
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">
@@ -117,11 +130,10 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
                 {location}
               </span>
             )}
-            {salary && (
+            {salaryInfo && (
               <span className="flex items-center gap-1">
                 <BanknoteIcon className="size-3.5" />
-                {salary}
-                {salaryPeriod}
+                {salaryInfo}
               </span>
             )}
             {postDate && (
@@ -133,29 +145,8 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
           </div>
         </div>
 
-        {job.description && (
-          <section aria-labelledby="job-description-heading">
-            <h2
-              id="job-description-heading"
-              className="mb-3 text-sm font-semibold"
-            >
-              Description
-            </h2>
-            <div
-              className="prose prose-sm max-w-none text-sm leading-relaxed [&_a]:text-primary"
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: job descriptions are HTML from the API
-              dangerouslySetInnerHTML={{ __html: job.description }}
-            />
-          </section>
-        )}
-
-        <section
-          aria-labelledby="job-details-heading"
-          className="border-t border-border pt-6"
-        >
-          <h2 id="job-details-heading" className="mb-3 text-sm font-semibold">
-            Details
-          </h2>
+        <section className="border-t border-border pt-6">
+          <h2 className="mb-3 text-sm font-semibold">Details</h2>
           <dl className="grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
             <div>
               <dt className="text-xs text-muted-foreground">Source</dt>
@@ -165,16 +156,22 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
               <dt className="text-xs text-muted-foreground">Language</dt>
               <dd className="uppercase">{job.language}</dd>
             </div>
-            {job.job_category && (
-              <div>
-                <dt className="text-xs text-muted-foreground">Category</dt>
-                <dd>{job.job_category}</dd>
+            {categories && (
+              <div className="sm:col-span-2">
+                <dt className="text-xs text-muted-foreground">Categories</dt>
+                <dd>{categories}</dd>
               </div>
             )}
             {postDate && (
               <div>
                 <dt className="text-xs text-muted-foreground">Posted</dt>
                 <dd>{postDate}</dd>
+              </div>
+            )}
+            {job.salary?.raw && (
+              <div className="sm:col-span-2">
+                <dt className="text-xs text-muted-foreground">Compensation</dt>
+                <dd className="text-xs">{job.salary.raw}</dd>
               </div>
             )}
           </dl>
