@@ -22,6 +22,7 @@ import {
 import { SORT_FIELDS } from "@/lib/api/constants";
 import { fetchJobs } from "@/lib/api/jobs";
 import type { JobPosting } from "@/lib/api/schemas";
+import { detectStateQuery } from "@/lib/state-search";
 
 function sortWithLocationFirst(items: JobPosting[]): JobPosting[] {
   return [...items].sort((a, b) => {
@@ -67,38 +68,40 @@ export function SearchResultsClient({
     parseAsInteger.withDefault(20),
   );
 
-  const filters = useMemo(
-    () => ({
-      q: q || undefined,
+  const filters = useMemo(() => {
+    const detectedState = detectStateQuery(q);
+    return {
+      q: detectedState ? undefined : q || undefined,
       company: company ?? undefined,
       language: language ?? undefined,
-      location_state: state ?? undefined,
+      location_state: state ?? detectedState ?? undefined,
       salary_min: salaryMin ?? undefined,
       salary_max: salaryMax ?? undefined,
       sort_by: sortBy,
       sort_order: sortOrder,
       page,
       page_size: pageSize,
-    }),
-    [
-      q,
-      company,
-      language,
-      state,
-      salaryMin,
-      salaryMax,
-      sortBy,
-      sortOrder,
-      page,
-      pageSize,
-    ],
-  );
+    };
+  }, [
+    q,
+    company,
+    language,
+    state,
+    salaryMin,
+    salaryMax,
+    sortBy,
+    sortOrder,
+    page,
+    pageSize,
+  ]);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["jobs", "list", filters],
     queryFn: () => fetchJobs(filters),
     placeholderData: (prev) => prev,
   });
+
+  const detectedState = detectStateQuery(q);
 
   const hasActiveFilters =
     !!q || !!language || !!state || salaryMin !== null || salaryMax !== null;
@@ -159,6 +162,9 @@ export function SearchResultsClient({
             : data
               ? `${data.total.toLocaleString()} results`
               : ""}
+          {detectedState && !state && (
+            <span className="ml-2 text-primary">in {detectedState}</span>
+          )}
         </p>
 
         <DropdownMenu>
