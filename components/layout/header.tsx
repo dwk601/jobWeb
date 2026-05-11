@@ -7,8 +7,6 @@ import { cn } from "@/lib/utils";
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
   { href: "/jobs", label: "Jobs" },
-  { href: "/companies", label: "Companies" },
-  { href: "/salaries", label: "Salaries" },
 ] as const;
 
 export function Header() {
@@ -21,20 +19,24 @@ export function Header() {
           href="/"
           className="text-sm font-semibold tracking-tight text-foreground"
         >
-          CareerFlow
+          Koreer
         </Link>
 
-        <nav className="flex items-center gap-1 text-sm">
+        <nav
+          className="flex items-center gap-1 text-sm"
+          aria-label="Main navigation"
+        >
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "rounded-md px-3 py-1.5 transition-colors",
+                "inline-flex items-center rounded-md px-3 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-ring",
                 pathname === item.href
                   ? "bg-secondary font-medium text-foreground"
                   : "text-muted-foreground hover:text-foreground",
               )}
+              aria-current={pathname === item.href ? "page" : undefined}
             >
               {item.label}
             </Link>
@@ -44,7 +46,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <Link
             href="/jobs"
-            className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:opacity-90"
+            className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition-colors hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
           >
             Find Jobs
           </Link>
