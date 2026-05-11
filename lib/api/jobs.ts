@@ -16,9 +16,10 @@ import {
 /** Fetch a paginated, filtered list of job postings. */
 export async function fetchJobs(
   filters: JobListFilters,
+  signal?: AbortSignal,
 ): Promise<JobListResponse> {
   const qs = buildQueryString(filters);
-  return apiCall(`/jobs/${qs}`, JobListResponseSchema);
+  return apiCall(`/jobs/${qs}`, JobListResponseSchema, { signal });
 }
 
 /** Fetch a single job by its numeric ID. */

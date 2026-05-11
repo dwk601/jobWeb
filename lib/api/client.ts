@@ -22,6 +22,12 @@ export async function apiCall<T extends z.ZodTypeAny>(
 
   if (!response.ok) {
     const errorBody = await response.text();
+    if (response.status === 429) {
+      const retryAfter = response.headers.get("Retry-After");
+      throw new ApiError(response.status, response.statusText, errorBody, {
+        retryAfter: retryAfter ? parseInt(retryAfter, 10) : null,
+      });
+    }
     throw new ApiError(response.status, response.statusText, errorBody);
   }
 
@@ -30,13 +36,19 @@ export async function apiCall<T extends z.ZodTypeAny>(
 }
 
 export class ApiError extends Error {
+  public isRateLimited: boolean;
+  public retryAfter: number | null;
+
   constructor(
     public status: number,
     public statusText: string,
     public body: string,
+    rateLimit?: { retryAfter: number | null },
   ) {
     super(`API Error ${status}: ${statusText}`);
     this.name = "ApiError";
+    this.isRateLimited = status === 429;
+    this.retryAfter = rateLimit?.retryAfter ?? null;
   }
 }
 

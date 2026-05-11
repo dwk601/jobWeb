@@ -20,9 +20,10 @@ import {
 import { LANGS, STATES } from "@/lib/api/constants";
 
 interface FilterBarProps {
-  q: string;
-  onQChange: (value: string) => void;
+  inputValue: string;
+  onInputChange: (value: string) => void;
   onSearch: () => void;
+  onClearSearch: () => void;
   language: string | null;
   onLanguageChange: (value: string | null) => void;
   state: string | null;
@@ -36,9 +37,10 @@ interface FilterBarProps {
 }
 
 export function FilterBar({
-  q,
-  onQChange,
+  inputValue,
+  onInputChange,
   onSearch,
+  onClearSearch,
   language,
   onLanguageChange,
   state,
@@ -59,20 +61,17 @@ export function FilterBar({
             <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              value={q}
-              onChange={(e) => onQChange(e.target.value)}
+              value={inputValue}
+              onChange={(e) => onInputChange(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onSearch()}
               placeholder="Search titles and companies..."
               aria-label="Search jobs"
               className="h-10 pl-9 pr-8 text-sm"
             />
-            {q && (
+            {inputValue && (
               <button
                 type="button"
-                onClick={() => {
-                  onQChange("");
-                  onSearch();
-                }}
+                onClick={onClearSearch}
                 className="absolute right-1.5 top-1/2 -translate-y-1/2 size-9 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="Clear search"
               >
@@ -162,20 +161,17 @@ export function FilterBar({
           <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            value={q}
-            onChange={(e) => onQChange(e.target.value)}
+            value={inputValue}
+            onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && onSearch()}
             placeholder="Search titles and companies..."
             aria-label="Search jobs"
             className="h-10 pl-9 pr-8 text-sm"
           />
-          {q && (
+          {inputValue && (
             <button
               type="button"
-              onClick={() => {
-                onQChange("");
-                onSearch();
-              }}
+              onClick={onClearSearch}
               className="absolute right-1.5 top-1/2 -translate-y-1/2 size-9 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Clear search"
             >

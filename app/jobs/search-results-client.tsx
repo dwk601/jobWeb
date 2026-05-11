@@ -8,10 +8,11 @@ import {
   parseAsStringEnum,
   useQueryState,
 } from "nuqs";
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { JobListSkeleton, JobRow } from "@/components/jobs/job-card";
 import { PaginationBar } from "@/components/jobs/pagination-bar";
 import { EmptyState, FilterBar } from "@/components/jobs/search-results";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +20,11 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ApiError } from "@/lib/api/client";
 import { SORT_FIELDS } from "@/lib/api/constants";
 import { fetchJobs } from "@/lib/api/jobs";
 import type { JobPosting } from "@/lib/api/schemas";
+import { useDebounce } from "@/lib/hooks";
 import { detectStateQuery } from "@/lib/state-search";
 
 function sortWithLocationFirst(items: JobPosting[]): JobPosting[] {
@@ -68,6 +71,15 @@ export function SearchResultsClient({
     parseAsInteger.withDefault(20),
   );
 
+  const [inputValue, setInputValue] = useState(q);
+  const debouncedQ = useDebounce(inputValue, 400);
+
+  useEffect(() => {
+    if (debouncedQ !== q) {
+      setQ(debouncedQ);
+    }
+  }, [debouncedQ, q, setQ]);
+
   const detectedState = useMemo(() => detectStateQuery(q), [q]);
 
   const filters = useMemo(() => {
@@ -97,18 +109,29 @@ export function SearchResultsClient({
     detectedState,
   ]);
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["jobs", "list", filters],
-    queryFn: () => fetchJobs(filters),
+    queryFn: ({ signal }) => fetchJobs(filters, signal),
     placeholderData: (prev) => prev,
+    retry: (failureCount, error) => {
+      if (error instanceof ApiError && error.status === 429) return false;
+      return failureCount < 2;
+    },
   });
 
   const hasActiveFilters =
     !!q || !!language || !!state || salaryMin !== null || salaryMax !== null;
 
   const handleSearch = useCallback(() => {
+    setQ(inputValue.trim() || "");
     setPage(1);
-  }, [setPage]);
+  }, [inputValue, setQ, setPage]);
+
+  const handleClearSearch = useCallback(() => {
+    setInputValue("");
+    setQ("");
+    setPage(1);
+  }, [setQ, setPage]);
 
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -129,6 +152,7 @@ export function SearchResultsClient({
   );
 
   const handleClearFilters = useCallback(() => {
+    setInputValue("");
     setQ("");
     setLanguage(null);
     setState(null);
@@ -142,12 +166,15 @@ export function SearchResultsClient({
     [data],
   );
 
+  const isRateLimited = error instanceof ApiError && error.status === 429;
+
   return (
     <div ref={resultsRef} className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
       <FilterBar
-        q={q}
-        onQChange={setQ}
+        inputValue={inputValue}
+        onInputChange={setInputValue}
         onSearch={handleSearch}
+        onClearSearch={handleClearSearch}
         language={language}
         onLanguageChange={setLanguage}
         state={state}
@@ -227,16 +254,41 @@ export function SearchResultsClient({
       {isLoading ? (
         <JobListSkeleton count={10} />
       ) : isError ? (
-        <div className="py-16 text-center">
-          <p className="text-sm font-medium text-destructive">
-            Error loading jobs
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {error instanceof Error
-              ? error.message
-              : "Something went wrong. Try again."}
-          </p>
-        </div>
+        isRateLimited ? (
+          <div className="py-16 text-center">
+            <p className="text-sm font-medium text-destructive">
+              Too many requests
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Please wait a moment before searching again.
+            </p>
+            {error instanceof ApiError && error.retryAfter != null && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Retry after {error.retryAfter} second
+                {error.retryAfter !== 1 ? "s" : ""}
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="py-16 text-center">
+            <p className="text-sm font-medium text-destructive">
+              Error loading jobs
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {error instanceof Error
+                ? error.message
+                : "Something went wrong. Try again."}
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={() => refetch()}
+            >
+              Retry
+            </Button>
+          </div>
+        )
       ) : data && sortedItems && sortedItems.length > 0 ? (
         <>
           <div className="divide-y divide-border">
