@@ -47,7 +47,7 @@ export function JobRow({ job, className }: JobRowProps) {
           className="text-xs text-muted-foreground"
           lang={job.language === "korean" ? "ko" : undefined}
         >
-          {job.company}
+          {job.company ?? "Unknown company"}
         </p>
       </div>
 

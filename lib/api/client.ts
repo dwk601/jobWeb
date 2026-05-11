@@ -1,6 +1,9 @@
 import type { z } from "zod";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "/api/v1";
+const API_BASE =
+  typeof window === "undefined"
+    ? (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8001/api/v1")
+    : "/api/v1";
 
 export async function apiCall<T extends z.ZodTypeAny>(
   path: string,
@@ -47,8 +50,10 @@ export function buildQueryString(
   const params = new URLSearchParams();
 
   for (const [key, value] of Object.entries(filters)) {
-    if (value === undefined || value === null || value === "") continue;
-    params.append(key, String(value));
+    if (value === undefined || value === null) continue;
+    const str = String(value).trim();
+    if (str === "") continue;
+    params.append(key, str);
   }
 
   const qs = params.toString();

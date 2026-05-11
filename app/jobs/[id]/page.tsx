@@ -14,12 +14,12 @@ export async function generateMetadata({
   const { id } = await params;
   try {
     const job = await fetchJobById(Number(id));
-    const title = `${job.title} at ${job.company}`;
+    const title = `${job.title} at ${job.company ?? "Unknown company"}`;
     const location = [job.location?.city, job.location?.state]
       .filter(Boolean)
       .join(", ");
     const description = [
-      job.company,
+      job.company ?? "",
       location,
       job.description
         ?.replace(/<[^>]*>/g, "")
@@ -79,7 +79,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         datePosted: job.post_date,
         hiringOrganization: {
           "@type": "Organization",
-          name: job.company,
+          name: job.company ?? "",
         },
         jobLocation:
           job.location?.city || job.location?.state

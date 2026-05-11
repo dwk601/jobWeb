@@ -72,7 +72,7 @@ export function SearchResultsClient({
 
   const filters = useMemo(() => {
     return {
-      q: detectedState ? undefined : q || undefined,
+      q: detectedState ? undefined : q.trim() || undefined,
       company: company ?? undefined,
       language: language ?? undefined,
       location_state: state ?? detectedState ?? undefined,
@@ -255,7 +255,7 @@ export function SearchResultsClient({
         </>
       ) : (
         <EmptyState
-          query={q || undefined}
+          query={q.trim() || undefined}
           onClearFilters={handleClearFilters}
         />
       )}

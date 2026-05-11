@@ -129,7 +129,7 @@ export function JobDetailClient({ jobId }: JobDetailClientProps) {
               className="font-medium"
               lang={job.language === "korean" ? "ko" : undefined}
             >
-              {job.company}
+              {job.company ?? "Unknown company"}
             </span>
           </div>
 

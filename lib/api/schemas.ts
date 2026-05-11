@@ -31,7 +31,7 @@ export const JobPostingSchema = z.object({
   record_id: z.string(),
   source: z.string(),
   title: z.string(),
-  company: z.string(),
+  company: z.string().nullable(),
   location: JobLocationSchema.nullable(),
   salary: JobSalarySchema.nullable(),
   language: z.string(),
