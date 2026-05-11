@@ -58,8 +58,8 @@ export function FilterBar({
     <>
       {/* Desktop filter bar */}
       <div className="hidden flex-col gap-3 lg:flex">
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1 max-w-md">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative flex-1 min-w-[160px] max-w-md">
             <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
@@ -67,7 +67,8 @@ export function FilterBar({
               onChange={(e) => onQChange(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onSearch()}
               placeholder="Search jobs..."
-              className="h-9 pl-9 pr-8 text-sm"
+              aria-label="Search jobs"
+              className="h-10 pl-9 pr-8 text-sm"
             />
             {q && (
               <button
@@ -76,7 +77,7 @@ export function FilterBar({
                   onQChange("");
                   onSearch();
                 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="Clear search"
               >
                 <X className="size-3.5" />
@@ -88,7 +89,7 @@ export function FilterBar({
             value={source ?? ""}
             onValueChange={(v) => onSourceChange(v || null)}
           >
-            <SelectTrigger className="h-9 w-[140px] text-xs">
+            <SelectTrigger className="h-10 min-w-[110px] text-xs">
               <SelectValue placeholder="Source" />
             </SelectTrigger>
             <SelectContent>
@@ -105,7 +106,7 @@ export function FilterBar({
             value={jobCategory ?? ""}
             onValueChange={(v) => onJobCategoryChange(v || null)}
           >
-            <SelectTrigger className="h-9 w-[150px] text-xs">
+            <SelectTrigger className="h-10 min-w-[110px] text-xs">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -122,7 +123,7 @@ export function FilterBar({
             value={language ?? ""}
             onValueChange={(v) => onLanguageChange(v || null)}
           >
-            <SelectTrigger className="h-9 w-[130px] text-xs">
+            <SelectTrigger className="h-10 min-w-[110px] text-xs">
               <SelectValue placeholder="Language" />
             </SelectTrigger>
             <SelectContent>
@@ -145,7 +146,8 @@ export function FilterBar({
                   e.target.value ? parseFloat(e.target.value) : null,
                 )
               }
-              className="h-9 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              aria-label="Minimum salary"
+              className="h-10 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <span className="text-xs text-muted-foreground">-</span>
             <Input
@@ -157,7 +159,8 @@ export function FilterBar({
                   e.target.value ? parseFloat(e.target.value) : null,
                 )
               }
-              className="h-9 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              aria-label="Maximum salary"
+              className="h-10 w-20 border-0 bg-transparent px-0 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
           </div>
 
@@ -166,7 +169,7 @@ export function FilterBar({
               variant="ghost"
               size="sm"
               onClick={onClearFilters}
-              className="h-9 text-xs text-muted-foreground hover:text-foreground"
+              className="text-xs text-muted-foreground hover:text-foreground"
             >
               Clear all
             </Button>
@@ -184,7 +187,8 @@ export function FilterBar({
             onChange={(e) => onQChange(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && onSearch()}
             placeholder="Search jobs..."
-            className="h-9 pl-9 pr-8 text-sm"
+            aria-label="Search jobs"
+            className="h-10 pl-9 pr-8 text-sm"
           />
           {q && (
             <button
@@ -193,7 +197,7 @@ export function FilterBar({
                 onQChange("");
                 onSearch();
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Clear search"
             >
               <X className="size-3.5" />
@@ -207,7 +211,7 @@ export function FilterBar({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 shrink-0 gap-1.5"
+                className="h-10 shrink-0 gap-1.5"
               />
             }
           >
@@ -227,7 +231,7 @@ export function FilterBar({
                   value={source ?? ""}
                   onValueChange={(v) => onSourceChange(v || null)}
                 >
-                  <SelectTrigger className="h-9 w-full text-xs">
+                  <SelectTrigger className="h-10 w-full text-xs">
                     <SelectValue placeholder="All sources" />
                   </SelectTrigger>
                   <SelectContent>
@@ -249,7 +253,7 @@ export function FilterBar({
                   value={jobCategory ?? ""}
                   onValueChange={(v) => onJobCategoryChange(v || null)}
                 >
-                  <SelectTrigger className="h-9 w-full text-xs">
+                  <SelectTrigger className="h-10 w-full text-xs">
                     <SelectValue placeholder="All categories" />
                   </SelectTrigger>
                   <SelectContent>
@@ -271,7 +275,7 @@ export function FilterBar({
                   value={language ?? ""}
                   onValueChange={(v) => onLanguageChange(v || null)}
                 >
-                  <SelectTrigger className="h-9 w-full text-xs">
+                  <SelectTrigger className="h-10 w-full text-xs">
                     <SelectValue placeholder="All languages" />
                   </SelectTrigger>
                   <SelectContent>
@@ -299,7 +303,8 @@ export function FilterBar({
                         e.target.value ? parseFloat(e.target.value) : null,
                       )
                     }
-                    className="h-9 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    aria-label="Minimum salary"
+                    className="h-10 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <span className="text-xs text-muted-foreground">-</span>
                   <Input
@@ -311,7 +316,8 @@ export function FilterBar({
                         e.target.value ? parseFloat(e.target.value) : null,
                       )
                     }
-                    className="h-9 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    aria-label="Maximum salary"
+                    className="h-10 flex-1 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -346,7 +352,7 @@ export function EmptyState({ query, onClearFilters }: EmptyStateProps) {
       <p className="mt-4 text-sm font-medium text-foreground">
         {query ? `No results for "${query}"` : "No jobs found"}
       </p>
-      <p className="mt-1 text-xs text-muted-foreground">
+      <p className="mt-1 px-4 text-xs text-muted-foreground">
         Try adjusting your search terms or removing filters.
       </p>
       {onClearFilters && (
